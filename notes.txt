@@ -1,0 +1,4 @@
+- figure out better way to overload the built in User model
+- flesh out the email module
+- flesh out a basic repository module
+- figure out clean way to handle file uploads/downloads
