@@ -1,5 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -10,7 +12,7 @@ from rpg import util
 
 
 
-def authenticate(func):
+def private(func):
     enabled = False
     def inner(*args, **kwargs):
         request = args[0]
@@ -31,20 +33,13 @@ class View(object):
         self.request = request
         self.session = request.session
 
-    def login(self):
-        # from accounts.models import BalanceUser as User
-        # from django.contrib.auth import login as auth_login
-
-        # user = User()
-        # user.email = email
-        # user.set_password(password)
-        # user.activation_token = util.guid()
-        # user.is_active = True
-        # user.activation_token = "" # Nullify activation_token
-        # user.save()
-        #
-        # auth_login(request, user)
-        # self.session.set_expiry(7200)
+    def login(self, username, password):
+        user = authenticate(
+            username=username,
+            password=password
+        )
+        auth_login(self.request, user)
+        self.session.set_expiry(7200)
         return True
 
     def redirect(self, uri, **params):

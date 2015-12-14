@@ -20,6 +20,9 @@
 
 ### Prepare the database
 * Add a DATABASE object entry to the /.config/settings.override.json file, copy/paste the DATABASE block from the settings.json file and update to include the database name, username, and password for your local db
+* Run initial database migration:  /Work/portal/.virtual/portal/bin/python manage.py migrate
+* Run the project database migration: /Work/portal/.virtual/portal/bin/python manage.py migrate rpg
 
 
-python manage.py syncdb # prepare the database
+#### NOTES
+* To create a new migration: /Work/portal/.virtual/portal/bin/python manage.py makemigrations rpg
