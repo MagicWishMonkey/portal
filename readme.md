@@ -15,4 +15,20 @@
 * Using the fully qualified path to the virtualenv pip, install the requirements
     * Example: /Work/portal/.virtual/portal/bin/pip install -r requirements.txt
 
+### Create a settings.override file for your local machine (note: this will not be included in source control)
+* Add a new json file to your /.config/ folder, named settings.override.json , add teh following block:
+    "DATABASES": {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": "builder-portal",
+            "USER": "123",
+            "PASSWORD": "1111",
+            "HOST": "127.0.0.1",
+            "PORT": "5432"
+        }
+    }
+
+### Prepare the database
+* Update the data /.config/settings.override.json file
+
 python manage.py syncdb # prepare the database
