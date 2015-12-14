@@ -19,6 +19,7 @@
 * Add a new json file to your /.config/ folder, named settings.override.json , with the following text: {}
 
 ### Prepare the database
-* Update the data /.config/settings.override.json file
+* Add a DATABASE object entry to the /.config/settings.override.json file, copy/paste the DATABASE block from the settings.json file and update to include the database name, username, and password for your local db
+
 
 python manage.py syncdb # prepare the database
