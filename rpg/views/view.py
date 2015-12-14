@@ -1,3 +1,5 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -44,6 +46,28 @@ class View(object):
         # auth_login(request, user)
         # self.session.set_expiry(7200)
         return True
+
+    def redirect(self, uri, **params):
+        if uri.find("/") > -1:
+            return HttpResponseRedirect(uri)
+
+        endpoint = reverse("rpg:%s" % uri)
+        if params:
+            buffer = []
+            for key in params:
+                val = params[key]
+
+                if buffer:
+                    buffer.append("&")
+                if not val:
+                    val = ""
+                elif isinstance(val, bool):
+                    val = str(val).lower()
+                buffer.append("{0}={1}".format(key, val))
+            querystring = "".join(buffer)
+            endpoint = "{0}?{1}".format(endpoint, querystring)
+
+        return HttpResponseRedirect(endpoint)
 
     def render(self, template, **kwargs):
         return render_to_response(

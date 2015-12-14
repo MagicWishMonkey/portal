@@ -1,5 +1,5 @@
 """
-WSGI config for metrics project.
+WSGI config for portal project.
 """
 
 import os
