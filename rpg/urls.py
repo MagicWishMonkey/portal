@@ -11,3 +11,4 @@ urlpatterns = [
     url(r'api/thingy/$', properties.select, name='thingy'),
 ]
 
+
