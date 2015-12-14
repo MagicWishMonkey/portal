@@ -10,10 +10,9 @@
 * How to install virtualenv - http://docs.python-guide.org/en/latest/dev/virtualenvs/
 * Create the virtualenv for your project
 
-
 ### Install the project requirements
 * Navigate to the folder containing the repository (lets assume this is /Work/portal)
-* Using the fully qualified path to the pip executable installed in your virtual environment, install the requirements (lets assume the path to the virtualenv pip is /Work/portal/.virtual/portal/bin/pip)
+* Using the fully qualified path to the virtualenv pip, install the requirements
     * Example: /Work/portal/.virtual/portal/bin/pip install -r requirements.txt
 
 python manage.py syncdb # prepare the database
