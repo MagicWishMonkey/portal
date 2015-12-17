@@ -15,4 +15,14 @@
 * Using the fully qualified path to the virtualenv pip, install the requirements
     * Example: /Work/portal/.virtual/portal/bin/pip install -r requirements.txt
 
-python manage.py syncdb # prepare the database
+### Create a settings.override file for your local machine (note: this will not be included in source control)
+* Add a new json file to your /.config/ folder, named settings.override.json , with the following text: {}
+
+### Prepare the database
+* Add a DATABASE object entry to the /.config/settings.override.json file, copy/paste the DATABASE block from the settings.json file and update to include the database name, username, and password for your local db
+* Run initial database migration:  /Work/portal/.virtual/portal/bin/python manage.py migrate
+* Run the project database migration: /Work/portal/.virtual/portal/bin/python manage.py migrate rpg
+
+
+#### NOTES
+* To create a new migration: /Work/portal/.virtual/portal/bin/python manage.py makemigrations rpg

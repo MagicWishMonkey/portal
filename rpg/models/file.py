@@ -48,59 +48,6 @@ from rpg.util import images
 
 
 
-class FilePath(object):
-    __root__ = None
-
-    def __init__(self, uri, path, relative):
-        self.uri = uri
-        self.path = path
-        self.relative = relative
-
-    @staticmethod
-    def root():
-        uri = FilePath.__root__
-        if not uri:
-            path = os.path.abspath(os.path.join(settings.WORKSPACE, "files"))
-            uri = (path, "%s/files" % settings.URI)
-            FilePath.__root__ = uri
-        return uri
-
-    @staticmethod
-    def resolve(target, *type):
-        target = target if isinstance(target, basestring) else target.uri
-        root = FilePath.root()
-        path, uri = root[0], root[1]
-        if not type:
-            type = get_file_type(target)
-        else:
-            type = type[0]
-        if target.startswith(type):
-            target = target[len(type) + 2:] # strip the type folder (including trailing s)
-
-        type = type.strip().lower()
-        uri = "%s/%ss/%s" % (uri, type, target)
-        path = "%s%s%ss%s%s" % (path, os.sep, type, os.sep, target)
-
-        chain = None
-        folder = os.path.dirname(path)
-        while not os.path.exists(folder):
-            if not chain:
-                chain = []
-            chain.append(folder)
-            folder = os.path.dirname(folder)
-
-        if chain:
-            chain.reverse()
-            for tmp_dir in chain:
-                os.mkdir(tmp_dir)
-
-        return FilePath(uri, path, "%ss/%s" % (type, target))
-
-
-    @property
-    def exists(self):
-        return os.path.exists(self.path)
-
 
 class File(models.Model):
     class Meta:
@@ -116,7 +63,7 @@ class File(models.Model):
     date_created = DateTimeField(auto_now=True)
 
     @staticmethod
-    def create(label, data):
+    def construct(label, data):
         assert label, "The label is not specified!"
         assert data, "The data is not specified!"
         #assert user, "The user is not specified!"
@@ -164,7 +111,7 @@ class File(models.Model):
         return f
 
     @staticmethod
-    def get(key):
+    def fetch(key):
         if isinstance(key, basestring):
             if key.isdigit():
                 key = int(key)
@@ -222,6 +169,59 @@ class File(models.Model):
 
     def __str__(self):
         return self.__repr__()
+
+
+class FilePath(object):
+    __root__ = None
+
+    def __init__(self, uri, path, relative):
+        self.uri = uri
+        self.path = path
+        self.relative = relative
+
+    @staticmethod
+    def root():
+        uri = FilePath.__root__
+        if not uri:
+            path = os.path.abspath(os.path.join(settings.WORKSPACE, "files"))
+            uri = (path, "%s/files" % settings.URI)
+            FilePath.__root__ = uri
+        return uri
+
+    @staticmethod
+    def resolve(target, *type):
+        target = target if isinstance(target, basestring) else target.uri
+        root = FilePath.root()
+        path, uri = root[0], root[1]
+        if not type:
+            type = get_file_type(target)
+        else:
+            type = type[0]
+        if target.startswith(type):
+            target = target[len(type) + 2:] # strip the type folder (including trailing s)
+
+        type = type.strip().lower()
+        uri = "%s/%ss/%s" % (uri, type, target)
+        path = "%s%s%ss%s%s" % (path, os.sep, type, os.sep, target)
+
+        chain = None
+        folder = os.path.dirname(path)
+        while not os.path.exists(folder):
+            if not chain:
+                chain = []
+            chain.append(folder)
+            folder = os.path.dirname(folder)
+
+        if chain:
+            chain.reverse()
+            for tmp_dir in chain:
+                os.mkdir(tmp_dir)
+
+        return FilePath(uri, path, "%ss/%s" % (type, target))
+
+    @property
+    def exists(self):
+        return os.path.exists(self.path)
 
 
 def get_file_type(name):

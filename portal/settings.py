@@ -36,6 +36,8 @@ WSGI_APPLICATION = 'portal.wsgi.application'
 
 DATABASES = CONFIG.get("DATABASES")
 
+#AUTH_USER_MODEL = 'rpg.models.accounts.PortalUser'
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
